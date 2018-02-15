@@ -34,11 +34,14 @@ except ImportError:
 
 class AstroSSHHook(BaseHook):
 
-    def __init__(self):
+    def __init__(
+            self,
+            ssh_conn_id):
+        self.ssh_conn_id = ssh_conn_id
+
         super().__init__(ssh_conn_id)
 
-    def create_tunnel(self, local_port, identityfile,
-                      remote_port=None, remote_host="localhost"):
+    def create_tunnel(self):
         """
         Creates a tunnel between two hosts. Like ssh -L <LOCAL_PORT>:host:<REMOTE_PORT>.
         Hard coded in for now. Down the line, it will pull from connections panel.
@@ -48,8 +51,8 @@ class AstroSSHHook(BaseHook):
 
         localport = '5439'
         remoteport = '5439'
-        user = 'periscope'
-        server = '52.10.89.212'
+        user = 'ubuntu'
+        server = '54.236.32.199'
         incoming_port = 17386
         key = Variable.get("key_file")
         identityfile = 'key_file.pem'
@@ -65,9 +68,10 @@ class AstroSSHHook(BaseHook):
         # Permissions are set as an octal integer.
         os.chmod("key_file.pem", 1130)
 
-        sshTunnelCmd = "ssh -N -L -4 {localhost}:127.0.0.1:{remote_port} -i %{identityfile} {user}@%{server}".format(
+        # 5432: 5432
+        sshTunnelCmd = "ssh -4 -i {identityfile} -L  {localhost}:10.20.2.111:{remote_port} -tt {user}@{server}".format(
             localhost=localport,
-            remoteport=remoteport,
+            remote_port=remoteport,
             identityfile=identityfile,
             user=user,
             server=server

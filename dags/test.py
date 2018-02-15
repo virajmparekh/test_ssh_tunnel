@@ -30,6 +30,7 @@ SELECT * FROM bamboo_hr.employee_directory
 with dag:
     test = SSHPostgresOperator(task_id='check_for_tunnel',
                                postgres_conn_id='rtr_redshift',
+                               ssh_conn_id='ssh_default',
                                sql=sql,
                                create_tunnel=True)
 
