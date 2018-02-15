@@ -25,7 +25,7 @@ kick_off_dag = DummyOperator(
 )
 
 sql = """
-SELECT * FROM bamboo_hr.employee_directory
+
 """
 with dag:
     test = SSHPostgresOperator(task_id='check_for_tunnel',

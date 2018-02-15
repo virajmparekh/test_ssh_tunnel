@@ -65,10 +65,11 @@ class AstroSSHHook(BaseHook):
 
         print(os.listdir())
 
-        # Permissions are set as an octal integer.
+
         os.chmod("key_file.pem", stat.S_IRWXU)
 
-        # 5432: 5432
+        # SSH is a black box that no one wants to touch.
+
         sshTunnelCmd = """ssh -4 -i {identityfile} -L  {localhost}:10.20.2.111:{remote_port} -tt -o ExitOnForwardFailure=yes -o "StrictHostKeyChecking no" {user}@{server}""".format(
             localhost=localport,
             remote_port=remoteport,
