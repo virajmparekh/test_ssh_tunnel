@@ -17,7 +17,7 @@
 
 import getpass
 import os
-
+import stat
 import shlex
 from airflow.models import Variable
 from airflow.hooks.base_hook import BaseHook
@@ -66,10 +66,10 @@ class AstroSSHHook(BaseHook):
         print(os.listdir())
 
         # Permissions are set as an octal integer.
-        os.chmod("key_file.pem", 1130)
+        os.chmod("key_file.pem", stat.S_IRWXU)
 
         # 5432: 5432
-        sshTunnelCmd = "ssh -4 -i {identityfile} -L  {localhost}:10.20.2.111:{remote_port} -tt {user}@{server}".format(
+        sshTunnelCmd = """ssh -4 -i {identityfile} -L  {localhost}:10.20.2.111:{remote_port} -tt -o ExitOnForwardFailure=yes -o "StrictHostKeyChecking no" {user}@{server}""".format(
             localhost=localport,
             remote_port=remoteport,
             identityfile=identityfile,
@@ -80,4 +80,5 @@ class AstroSSHHook(BaseHook):
         logging.info(sshTunnelCmd)
 
         args = shlex.split(sshTunnelCmd)
+        print("MAKING TUNNEL!")
         tunnel = subprocess.Popen(args)

@@ -1,6 +1,7 @@
 from plugins.ssh_postgres_plugin.hooks.astroSSHHook import AstroSSHHook
 from airflow.operators import PostgresOperator
 from airflow.hooks import PostgresHook
+import time
 import logging
 
 
@@ -32,6 +33,10 @@ class SSHPostgresOperator(PostgresOperator):
         if self.create_tunnel is True:
             self.create_ssh_tunnel()
 
+
+        print("EXECUTING QUERY!")
+
+        time.sleep(10)
         self.hook = PostgresHook(postgres_conn_id=self.postgres_conn_id,
                                  schema=self.database)
         self.hook.run(self.sql, self.autocommit, parameters=self.parameters)
