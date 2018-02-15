@@ -21,6 +21,7 @@ class SSHPostgresOperator(PostgresOperator):
         self.autocommit = autocommit
         self.parameters = parameters
         self.database = database
+        self.create_tunnel = create_tunnel
 
     def create_tunnel(self):
         print("CREATING TUNNEL")
